@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: node-ts
+  name: node-ts
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: node-ts
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        run: node-ts
+    spec:
+      containers:
+        - image: wesley/node2
+          imagePullPolicy: 'IfNotPresent'
+          name: node-ts
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
