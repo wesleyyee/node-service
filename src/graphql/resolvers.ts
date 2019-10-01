@@ -7,6 +7,7 @@ const resolvers = {
     user: async (parent: any, args: { id: string }) =>
       await User.query().findById(args.id),
     users: async () => await User.query(),
+    currentUser: (parent: any, args: any, context: any) => context.user,
   },
 };
 

@@ -2,16 +2,20 @@
   "compilerOptions": {
     "allowUnreachableCode": false,
     "alwaysStrict": true,
+    "esModuleInterop": true,
     "module": "commonjs",
     "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
+    "skipLibCheck": true,
     "strict": true,
     "strictNullChecks": true,
     "target": "es6",
+    "types": ["passport", "passport-facebook"],
     "rootDir": "src",
     "outDir": "lib"
-  }
+  },
+  "exclude": ["node_modules"]
 }
