@@ -12,9 +12,11 @@
   },
   "license": "MIT",
   "dependencies": {
+    "apollo-server": "^2.9.4",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "express-promise-router": "^3.0.1",
+    "graphql": "^14.5.8",
     "knex": "^0.14.6",
     "lodash": "^4.17.4",
     "morgan": "^1.9.0",

@@ -1,13 +1,11 @@
-import registerApi from './api';
-import * as bodyParser from 'body-parser';
-import * as express from 'express';
 import * as Knex from 'knex';
-import * as morgan from 'morgan';
 import { Model } from 'objection';
+import { ApolloServer } from 'apollo-server';
+import { resolvers, schemas } from './graphql';
 
 const knexConfig = require('../knexfile');
 // Initialize knex.
-export const knex = Knex(knexConfig.production);
+export const knex = Knex(knexConfig.development);
 
 // Create or migrate:
 knex.migrate.latest();
@@ -17,39 +15,9 @@ knex.migrate.latest();
 // the Model.bindKnex method.
 Model.knex(knex);
 
-// Unfortunately the express-promise-router types are borked. Just require():
-const router = require('express-promise-router')();
-const app = express()
-  .use(bodyParser.json())
-  .use(morgan('dev'))
-  .use(router)
-  .set('json spaces', 2);
+const server = new ApolloServer({ typeDefs: schemas, resolvers });
 
-// Register our REST API.
-registerApi(router);
-
-// Error handling. The `ValidationError` instances thrown by objection.js have a `statusCode`
-// property that is sent as the status code of the response.
-//
-// NOTE: This is not a good error handler, this is the simplest one. See the error handing
-//       recipe for a better handler: https://vincit.github.io/objection.js/recipes/error-handling.html#error-handling
-app.use(
-  (
-    err: any,
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    if (err) {
-      res
-        .status(err.statusCode || err.status || 500)
-        .send(err.data || err.message || {});
-    } else {
-      next();
-    }
-  }
-);
-const port = process.env.PORT || 8080;
-const server = app.listen(port, function() {
-  console.log('Example app listening at port %s', port);
+// The `listen` method launches a web server.
+server.listen().then(({ url }: { url: string }) => {
+  console.log(`🚀  Server ready at ${url}`);
 });
